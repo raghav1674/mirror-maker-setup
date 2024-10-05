@@ -33,3 +33,14 @@ variable "kafka_connect_properties" {
   type        = map(string)
   default     = {}
 }
+
+variable "dd_api_key" {
+  description = "Datadog Api Key"
+  type        = string
+  sensitive   = true
+}
+
+variable "dd_site" {
+  description = "Datadog URL"
+  type        = string
+}

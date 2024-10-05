@@ -2,7 +2,7 @@
 
 yum install wget -y
 
-sudo useradd kafka -d /opt/kafka -s /bin/bash
+useradd kafka -d /opt/kafka -s /bin/bash
 
 mkdir -p /opt/kafka/jdk/java17/
 
@@ -37,7 +37,7 @@ sysctl -p /etc/sysctl.d/99-kafka.conf
 
 mkdir -p /opt/kafka/{libs,connectors,logs,config}
 
-sudo tee /opt/kafka/config/connect-distributed.properties <<EOF
+tee /opt/kafka/config/connect-distributed.properties <<EOF
 
 bootstrap.servers=${bootstrap_servers}
 group.id=connect-cluster-${cluster_suffix}
@@ -74,9 +74,9 @@ ${key}=${value}
 %{ endfor ~}
 EOF
 
-sudo chown -R kafka:kafka  /opt/kafka
+chown -R kafka:kafka  /opt/kafka
 
-sudo tee /etc/systemd/system/kafka-connect.service <<EOF
+tee /etc/systemd/system/kafka-connect.service <<EOF
 [Unit]
 Description=Kafka Connect
 After=network.target
@@ -97,7 +97,34 @@ Restart=on-failure
 WantedBy=multi-user.target
 EOF
 
-sudo systemctl daemon-reload
-sudo systemctl enable kafka-connect
-sudo systemctl start kafka-connect
+systemctl daemon-reload
+systemctl enable kafka-connect
+systemctl start kafka-connect
 
+# Install Datadog Agent
+tee /etc/yum.repos.d/datadog.repo <<EOF
+[datadog]
+name=Datadog, Inc.
+baseurl=https://yum.datadoghq.com/stable/7/aarch64/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://keys.datadoghq.com/DATADOG_RPM_KEY_CURRENT.public
+       https://keys.datadoghq.com/DATADOG_RPM_KEY_B01082D3.public
+       https://keys.datadoghq.com/DATADOG_RPM_KEY_FD4BF915.public
+       https://keys.datadoghq.com/DATADOG_RPM_KEY_E09422B3.public
+EOF
+
+yum install datadog-agent -y
+sed "s/api_key:.*/api_key: ${dd_api_key}/" /etc/datadog-agent/datadog.yaml.example > /etc/datadog-agent/datadog.yaml
+sed -i "s/# site:.*/site: ${dd_site}/" /etc/datadog-agent/datadog.yaml
+chown dd-agent:dd-agent /etc/datadog-agent/datadog.yaml && chmod 640 /etc/datadog-agent/datadog.yaml
+
+tee /etc/datadog-agent/conf.d/openmetrics.d/conf.yaml <<EOF
+instances:
+  - openmetrics_endpoint: http://localhost:3600/metrics
+    metrics: [".*"]
+    tag_by_endpoint: false
+EOF
+
+systemctl restart datadog-agent.service

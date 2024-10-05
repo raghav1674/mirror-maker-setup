@@ -32,3 +32,6 @@ connect_instances = [
       subnet_id     = "subnet-xxxxxxxxxx"
     }
   ]
+
+dd_api_key = "xxxx"
+dd_site = "us5.datadoghq.com"

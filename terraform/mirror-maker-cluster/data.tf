@@ -30,6 +30,8 @@ data "cloudinit_config" "this" {
       bootstrap_servers = var.bootstrap_servers
       cluster_suffix    = var.cluster_suffix
       kafka_connect_properties = var.kafka_connect_properties
+      dd_api_key = var.dd_api_key
+      dd_site = var.dd_site
     })
   }
 }
