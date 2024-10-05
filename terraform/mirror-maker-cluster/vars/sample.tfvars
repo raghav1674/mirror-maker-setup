@@ -36,3 +36,25 @@ connect_instances = [
 dd_api_key = "xxxx"
 dd_site = "us5.datadoghq.com"
 additional_security_group_ids = ["sg-xxxxxxxxxx"]
+
+# monitoring_instance = {
+#     name          = "monitoring"
+#     instance_type = "t4g.large"
+#     subnet_id     = "subnet-xxxxxxxxx"
+#     source_exporter_args = {
+#       "kafka.server" : "broker-source",
+#       "sasl.enabled" : "",
+#       "sasl.username" : "username",
+#       "sasl.password" : "password",
+#       "sasl.mechanism": "scram-sha512",
+#       "tls.enabled" : ""
+#     }
+#     target_exporter_args = {
+#       "kafka.server" : "broker-dest"
+#       "sasl.enabled" : "",
+#       "sasl.username" : "username",
+#       "sasl.password" : "password",
+#       "sasl.mechanism": "scram-sha512",
+#       "tls.enabled" : ""
+#     }
+# }

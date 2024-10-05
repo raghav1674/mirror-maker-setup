@@ -27,11 +27,11 @@ data "cloudinit_config" "this" {
     filename     = "main.sh"
     content_type = "text/x-shellscript"
     content = templatefile("${path.module}/user-data/main.sh", {
-      bootstrap_servers = var.bootstrap_servers
-      cluster_suffix    = var.cluster_suffix
+      bootstrap_servers        = var.bootstrap_servers
+      cluster_suffix           = var.cluster_suffix
       kafka_connect_properties = var.kafka_connect_properties
-      dd_api_key = var.dd_api_key
-      dd_site = var.dd_site
+      dd_api_key               = var.dd_api_key
+      dd_site                  = var.dd_site
     })
   }
 }
