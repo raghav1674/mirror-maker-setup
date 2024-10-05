@@ -1,0 +1,7 @@
+terraform/**/.terraform
+*.tfstate
+*.tfstate.*
+**/vars/test.tfvars
+
+scripts/actual-configurations
+reference
