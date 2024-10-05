@@ -54,9 +54,9 @@ variable "additional_security_group_ids" {
 variable "monitoring_instance" {
   description = "monitoring instance"
   type = object({
-    name          = string
-    instance_type = string
-    subnet_id     = string
+    name                 = string
+    instance_type        = string
+    subnet_id            = string
     source_exporter_args = map(string)
     target_exporter_args = map(string)
   })

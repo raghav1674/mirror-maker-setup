@@ -1,5 +1,5 @@
 locals {
-    create_monitoring_instance = var.monitoring_instance != null
+  create_monitoring_instance = var.monitoring_instance != null
 }
 
 data "cloudinit_config" "monitoring" {
@@ -12,8 +12,8 @@ data "cloudinit_config" "monitoring" {
     content = templatefile("${path.module}/user-data/monitoring.sh", {
       source_exporter_args = var.monitoring_instance.source_exporter_args
       target_exporter_args = var.monitoring_instance.target_exporter_args
-      dd_api_key = var.dd_api_key
-      dd_site    = var.dd_site
+      dd_api_key           = var.dd_api_key
+      dd_site              = var.dd_site
     })
   }
 }
@@ -32,6 +32,6 @@ resource "aws_instance" "monitoring" {
   user_data_base64            = data.cloudinit_config.monitoring[0].rendered
   user_data_replace_on_change = true
   tags = {
-    Name =  var.monitoring_instance.name
+    Name = var.monitoring_instance.name
   }
 }
