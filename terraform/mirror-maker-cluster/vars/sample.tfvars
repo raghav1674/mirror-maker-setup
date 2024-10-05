@@ -35,3 +35,4 @@ connect_instances = [
 
 dd_api_key = "xxxx"
 dd_site = "us5.datadoghq.com"
+additional_security_group_ids = ["sg-xxxxxxxxxx"]

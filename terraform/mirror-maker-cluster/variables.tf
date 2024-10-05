@@ -44,3 +44,9 @@ variable "dd_site" {
   description = "Datadog URL"
   type        = string
 }
+
+variable "additional_security_group_ids" {
+  description = "Additional security group ids"
+  type        = list(string)
+  default     = []
+}
