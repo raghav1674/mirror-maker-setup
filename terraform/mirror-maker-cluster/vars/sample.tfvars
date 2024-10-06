@@ -58,3 +58,8 @@ additional_security_group_ids = ["sg-xxxxxxxxxx"]
 #       "tls.enabled" : ""
 #     }
 # }
+
+default_tags = {
+    "Owner" = "user"
+    "Environment" = "test"
+  }

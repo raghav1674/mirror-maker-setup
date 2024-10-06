@@ -68,3 +68,15 @@ variable "associate_public_ip_address" {
   type        = bool
   default     = false
 }
+
+variable "instance_profile_name" {
+  description = "The instance profile name"
+  type        = string
+  default     = null
+}
+
+variable "default_tags" {
+  description = "The default tags"
+  type        = map(string)
+  default     = {}
+}
