@@ -2,6 +2,10 @@
 
 yum install wget -y
 
+sudo yum install -y https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/linux_arm64/amazon-ssm-agent.rpm
+
+sudo systemctl enable amazon-ssm-agent
+
 useradd kafka -d /opt/kafka -s /bin/bash
 
 mkdir -p /opt/kafka/jdk/java17/
