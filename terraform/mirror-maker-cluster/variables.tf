@@ -62,3 +62,9 @@ variable "monitoring_instance" {
   })
   default = null
 }
+
+variable "associate_public_ip_address" {
+  description = "Associate public IP address"
+  type        = bool
+  default     = false
+}

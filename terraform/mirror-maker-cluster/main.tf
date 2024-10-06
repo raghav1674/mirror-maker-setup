@@ -11,6 +11,7 @@ resource "aws_instance" "this" {
   }
   user_data_base64            = data.cloudinit_config.this.rendered
   user_data_replace_on_change = true
+  associate_public_ip_address = var.associate_public_ip_address
   tags = {
     Name = each.value.name
   }

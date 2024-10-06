@@ -17,25 +17,26 @@
                     "value",
                     "sum"
                 ],
+                "time": {},
                 "type": "timeseries",
                 "requests": [
                     {
                         "formulas": [
                             {
-                                "formula": "query1",
                                 "number_format": {
                                     "unit": {
                                         "type": "canonical_unit",
                                         "unit_name": "millisecond"
                                     }
-                                }
+                                },
+                                "formula": "query1"
                             }
                         ],
                         "queries": [
                             {
                                 "data_source": "metrics",
                                 "name": "query1",
-                                "query": "avg:connect3.kafka_connect_mirror_source_connector_replication_latency_ms{*} by {partition,topic}"
+                                "query": "avg:kafka_connect_mirror_source_connector_replication_latency_ms_avg{*} by {partition,topic}"
                             }
                         ],
                         "response_format": "timeseries",
@@ -57,9 +58,9 @@
             }
         },
         {
-            "id": 8084176939000932,
+            "id": 7974027847712054,
             "definition": {
-                "title": "MM2 Consumer Lag (ms)",
+                "title": "MM2 Source Record Ages Average  (ms)",
                 "title_size": "16",
                 "title_align": "left",
                 "show_legend": true,
@@ -71,25 +72,26 @@
                     "value",
                     "sum"
                 ],
+                "time": {},
                 "type": "timeseries",
                 "requests": [
                     {
                         "formulas": [
                             {
-                                "formula": "query1",
                                 "number_format": {
                                     "unit": {
                                         "type": "canonical_unit",
                                         "unit_name": "millisecond"
                                     }
-                                }
+                                },
+                                "formula": "query1"
                             }
                         ],
                         "queries": [
                             {
                                 "data_source": "metrics",
                                 "name": "query1",
-                                "query": "sum:connect3.kafka_consumer_fetch_manager_records_lag{*} by {topic,partition}"
+                                "query": "avg:kafka_connect_mirror_source_connector_record_age_ms_avg{*} by {topic,partition,host}"
                             }
                         ],
                         "response_format": "timeseries",
@@ -125,25 +127,26 @@
                     "value",
                     "sum"
                 ],
+                "time": {},
                 "type": "timeseries",
                 "requests": [
                     {
                         "formulas": [
                             {
-                                "formula": "query1",
                                 "number_format": {
                                     "unit": {
                                         "type": "canonical_unit",
                                         "unit_name": "unit"
                                     }
-                                }
+                                },
+                                "formula": "query1"
                             }
                         ],
                         "queries": [
                             {
                                 "data_source": "metrics",
                                 "name": "query1",
-                                "query": "min:connect3.kafka_connect_source_task_source_record_active_count{*} by {connector,task}"
+                                "query": "sum:kafka_connect_source_task_source_record_active_count{connector:mm2-msc} by {connector,task,host}"
                             }
                         ],
                         "response_format": "timeseries",
@@ -165,9 +168,9 @@
             }
         },
         {
-            "id": 7974027847712054,
+            "id": 8084176939000932,
             "definition": {
-                "title": "MM2 Source Record Ages (ms)",
+                "title": "MM2 Consumer Lag (ms)",
                 "title_size": "16",
                 "title_align": "left",
                 "show_legend": true,
@@ -179,25 +182,26 @@
                     "value",
                     "sum"
                 ],
+                "time": {},
                 "type": "timeseries",
                 "requests": [
                     {
                         "formulas": [
                             {
-                                "formula": "query1",
                                 "number_format": {
                                     "unit": {
                                         "type": "canonical_unit",
                                         "unit_name": "millisecond"
                                     }
-                                }
+                                },
+                                "formula": "query1"
                             }
                         ],
                         "queries": [
                             {
                                 "data_source": "metrics",
                                 "name": "query1",
-                                "query": "avg:connect3.kafka_connect_mirror_source_connector_record_age_ms{*} by {topic,partition}"
+                                "query": "sum:kafka_consumer_fetch_manager_records_lag{*} by {topic,partition}"
                             }
                         ],
                         "response_format": "timeseries",
@@ -233,25 +237,26 @@
                     "value",
                     "sum"
                 ],
+                "time": {},
                 "type": "timeseries",
                 "requests": [
                     {
                         "formulas": [
                             {
-                                "formula": "query1",
                                 "number_format": {
                                     "unit": {
                                         "type": "canonical_unit",
                                         "unit_name": "millisecond"
                                     }
-                                }
+                                },
+                                "formula": "query1"
                             }
                         ],
                         "queries": [
                             {
                                 "data_source": "metrics",
                                 "name": "query1",
-                                "query": "sum:connect3.kafka_consumer_fetch_manager_fetch_latency_avg{*} by {clientid,host}"
+                                "query": "sum:kafka_consumer_fetch_manager_fetch_latency_avg{*} by {clientid,host}"
                             }
                         ],
                         "response_format": "timeseries",
@@ -268,7 +273,7 @@
             "layout": {
                 "x": 4,
                 "y": 2,
-                "width": 4,
+                "width": 8,
                 "height": 2
             }
         },
@@ -317,7 +322,7 @@
             "layout": {
                 "x": 0,
                 "y": 4,
-                "width": 8,
+                "width": 12,
                 "height": 3
             }
         }
