@@ -1,10 +1,10 @@
 module "msk" {
-  source         = "./modules/msk"
-  vpc_id         = ""
-  broker_subnets = []
-  cluster_name   = ""
-  kafka_version  = ""
-  kraft_enabled  = false
+  source         = "../modules/msk"
+  vpc_id         = "vpc-02f921ec15fbafd93"
+  broker_subnets = ["subnet-060e51dc9c2fbec3f"]
+  cluster_name   = "test"
+  kafka_version  = "3.7.1"
+  kraft_enabled  = true
   # https://docs.aws.amazon.com/msk/latest/developerguide/bestpractices.html
   broker_configuration = <<PROPERTIES
 group.initial.rebalance.delay.ms = 0
@@ -25,7 +25,7 @@ PROPERTIES
   broker_volume_size   = 100
   client_authentication = {
     sasl = {
-      scram = false
+      scram = true
       iam   = true
     }
     tls = true

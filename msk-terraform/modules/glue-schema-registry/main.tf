@@ -1,5 +1,5 @@
 resource "aws_glue_registry" "this" {
-  for_each      = { for schema_registry in var.schema_registries : schema_registry.name => schema_registry.description }
+  for_each      = { for schema_registry in var.schema_registries : schema_registry.name => schema_registry }
   registry_name = each.key
   description   = each.value.description
   tags          = var.tags

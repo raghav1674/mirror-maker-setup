@@ -2,7 +2,7 @@ locals {
   broker_ports = {
     9092 = "PLAINTEXT"
     9096 = "TLS"
-    9098 = "SASL_PLAINTEXT"
+    9098 = "IAM"
     9094 = "SASL_SSL"
   }
 
@@ -14,7 +14,7 @@ locals {
   client_broker_ports = {
     9092 = "PLAINTEXT"
     9096 = "TLS"
-    9098 = "SASL_PLAINTEXT"
+    9098 = "IAM"
     9094 = "SASL_SSL"
   }
 
@@ -35,4 +35,7 @@ locals {
   }
 
   kafka_version = var.kraft_enabled ? "${var.kafka_version}.kraft" : var.kafka_version
+
+  region     = data.aws_region.current.id
+  account_id = data.aws_caller_identity.current.account_id
 }

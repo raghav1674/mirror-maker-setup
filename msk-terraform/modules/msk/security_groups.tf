@@ -47,7 +47,7 @@ resource "aws_security_group" "external" {
   vpc_id      = var.vpc_id
 }
 
-resource "aws_vpc_security_group_ingress_rule" "allow_inter_broker_access" {
+resource "aws_vpc_security_group_ingress_rule" "allow_broker_client_access" {
   for_each          = local.client_broker_rules
   security_group_id = aws_security_group.internal.id
   cidr_ipv4         = each.value.cidr_ipv4

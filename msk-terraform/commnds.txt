@@ -1,0 +1,6 @@
+wget https://github.com/gruntwork-io/terragrunt/releases/download/v0.68.7/terragrunt_darwin_arm64
+mv terragrunt_darwin_arm64 terragrunt
+chmod +x terragrunt
+mv terragrunt /usr/local/bin/
+
+

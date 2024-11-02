@@ -23,13 +23,17 @@ variable "schemas" {
   default = []
 }
 
-# variable "access_policies" {
-#   type = list(object({
-#     principal_arn        = string
-#     principal_type       = string
-#     schemas              = list(object({
-#       schema_registry_name = string
-#       schema_name          = string
-#     }))
-#   }))
-# }
+variable "cross_account_access" {
+  type = map(object({
+    prinicipal_arns = optional(list(string), [])
+    account_id      = string
+    schemas         = list(string)
+    registries      = list(string)
+    policy_conditions = optional(list(object({
+      test     = string
+      variable = string
+      values   = list(string)
+    })), [])
+  }))
+  default = {}
+}

@@ -56,9 +56,14 @@ variable "broker_volume_size" {
 variable "broker_max_volume_size" {
   type        = number
   description = "The maximum size in GB of the EBS volume for the broker nodes"
-  default     = 16384
+  default     = 1000
 }
 
+variable "enable_storage_autoscaling" {
+  type        = bool
+  description = "Indicates whether you want to enable or disable storage autoscaling for the broker nodes"
+  default     = false
+}
 
 variable "client_authentication" {
   type        = any
@@ -84,8 +89,11 @@ variable "monitoring_cidr_blocks" {
   default     = []
 }
 
-
-
-
-
-
+variable "scram_users" {
+  type = list(object({
+    username = string
+    password = string
+  }))
+  description = "The list of SCRAM users to create"
+  default     = []
+}

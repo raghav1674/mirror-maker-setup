@@ -12,23 +12,23 @@ resource "aws_msk_cluster" "this" {
     instance_type  = var.broker_instance_type
     client_subnets = var.broker_subnets
 
-    connectivity_info {
-      vpc_connectivity {
-        dynamic "client_authentication" {
-          for_each = var.client_authentication
-          content {
-            dynamic "sasl" {
-              for_each = try([client_authentication.value.sasl], [])
-              content {
-                iam   = try(sasl.value.iam, null)
-                scram = try(sasl.value.scram, null)
-              }
-            }
-            tls = try(client_authentication.value.tls, null)
-          }
-        }
-      }
-    }
+    # connectivity_info {
+    #   vpc_connectivity {
+    #     dynamic "client_authentication" {
+    #       for_each = var.client_authentication == null ? [] : [1]
+    #       content {
+    #         dynamic "sasl" {
+    #           for_each = try([var.client_authentication.value.sasl], [])
+    #           content {
+    #             iam   = try(sasl.value.iam, null)
+    #             scram = try(sasl.value.scram, null)
+    #           }
+    #         }
+    #         tls = try(var.client_authentication.value.tls, null)
+    #       }
+    #     }
+    #   }
+    # }
 
     storage_info {
       ebs_storage_info {
@@ -44,17 +44,17 @@ resource "aws_msk_cluster" "this" {
   }
 
   dynamic "client_authentication" {
-    for_each = var.client_authentication
+    for_each = var.client_authentication == null ? [] : [1]
     content {
       dynamic "sasl" {
-        for_each = try([client_authentication.value.sasl], [])
+        for_each = try([var.client_authentication.sasl], [])
 
         content {
           iam   = try(sasl.value.iam, null)
           scram = try(sasl.value.scram, null)
         }
       }
-      unauthenticated = try(client_authentication.value.unauthenticated, null)
+      unauthenticated = try(var.client_authentication.unauthenticated, null)
     }
   }
 
