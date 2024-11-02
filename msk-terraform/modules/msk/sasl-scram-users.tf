@@ -1,4 +1,5 @@
 resource "aws_kms_key" "this" {
+  count                    = local.create_scram_users
   description              = "Kms key for Secret Used by MSK"
   enable_key_rotation      = true
   deletion_window_in_days  = 7
@@ -8,7 +9,7 @@ resource "aws_kms_key" "this" {
 
 # https://repost.aws/questions/QU-l9TBiKvR0a_Io98aeptHg/minimal-privilege-msk-scram-kms-key-policy
 data "aws_iam_policy_document" "this" {
-
+  count                    = local.create_scram_users
   statement {
     sid = "DefaultKeyPolicy"
 
@@ -55,8 +56,9 @@ data "aws_iam_policy_document" "this" {
 }
 
 resource "aws_kms_key_policy" "this" {
-  key_id = aws_kms_key.this.id
-  policy = data.aws_iam_policy_document.this.json
+  count = local.create_scram_users
+  key_id = aws_kms_key.this[0].id
+  policy = data.aws_iam_policy_document.this[0].json
 }
 
 module "secrets" {
@@ -69,6 +71,7 @@ module "secrets" {
 }
 
 resource "aws_msk_scram_secret_association" "this" {
+  count           = local.create_scram_users
   cluster_arn     = aws_msk_cluster.this.arn
   secret_arn_list = [for secret in module.secrets : secret.arn]
   depends_on      = [module.secrets]
