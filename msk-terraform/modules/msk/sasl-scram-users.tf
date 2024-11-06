@@ -9,7 +9,6 @@ resource "aws_kms_key" "this" {
 
 # https://repost.aws/questions/QU-l9TBiKvR0a_Io98aeptHg/minimal-privilege-msk-scram-kms-key-policy
 data "aws_iam_policy_document" "this" {
-  count                    = local.create_scram_users
   statement {
     sid = "DefaultKeyPolicy"
 
@@ -56,15 +55,27 @@ data "aws_iam_policy_document" "this" {
 }
 
 resource "aws_kms_key_policy" "this" {
-  count = local.create_scram_users
+  count  = local.create_scram_users
   key_id = aws_kms_key.this[0].id
-  policy = data.aws_iam_policy_document.this[0].json
+  policy = data.aws_iam_policy_document.this.json
 }
 
+resource "random_password" "sasl_password" {
+  for_each         = { for user in var.scram_users : user.username => user }
+  length           = 16
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+}
+
+locals {
+  sasl_scram_users_with_password = { for user in var.scram_users : "AmazonMSK_${user.username}" => { username = user.username, password = random_password.sasl_password[user.username].result } }
+}
+
+
 module "secrets" {
-  for_each                = { for user in var.scram_users : "AmazonMSK_${user.username}" => { username = user.username, password = user.password } }
+  for_each                = local.sasl_scram_users_with_password
   source                  = "../secretsmanager"
-  kms_key_id              = aws_kms_key.this.key_id
+  kms_key_id              = aws_kms_key.this[0].key_id
   name                    = each.key
   recovery_window_in_days = 7
   secret_string           = jsonencode(each.value)

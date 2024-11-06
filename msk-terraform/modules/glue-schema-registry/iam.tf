@@ -14,11 +14,6 @@ data "aws_iam_policy_document" "cross_account_role_policy" {
       [for schema_name in each.value.schemas : local.schemas[schema_name]],
       [for registry_name in each.value.registries : local.registries[registry_name]]
     )
-
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${local.account_id}:root", "arn:aws:iam::${local.account_id}:role/${each.key}_GlueSchemaAccessRole"]
-    }
   }
   statement {
     effect  = "Allow"
@@ -27,11 +22,6 @@ data "aws_iam_policy_document" "cross_account_role_policy" {
       [for schema_name in each.value.schemas : local.schemas[schema_name]],
       [for registry_name in each.value.registries : local.registries[registry_name]]
     )
-
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${local.account_id}:root", "arn:aws:iam::${local.account_id}:role/${each.key}_GlueSchemaAccessRole"]
-    }
   }
 }
 

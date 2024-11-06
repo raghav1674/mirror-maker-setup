@@ -15,6 +15,12 @@ resource "aws_vpc_security_group_ingress_rule" "allow_inter_broker_access" {
   description                  = each.value
 }
 
+resource "aws_vpc_security_group_ingress_rule" "allow_ingress" {
+  security_group_id            = aws_security_group.internal.id
+  referenced_security_group_id = aws_security_group.internal.id
+  ip_protocol                  = "-1"
+}
+
 resource "aws_vpc_security_group_egress_rule" "allow_egress" {
   security_group_id            = aws_security_group.internal.id
   referenced_security_group_id = aws_security_group.internal.id
