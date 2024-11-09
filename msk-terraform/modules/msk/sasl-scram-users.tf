@@ -4,7 +4,6 @@ resource "aws_kms_key" "this" {
   enable_key_rotation      = true
   deletion_window_in_days  = 7
   customer_master_key_spec = "SYMMETRIC_DEFAULT"
-
 }
 
 # https://repost.aws/questions/QU-l9TBiKvR0a_Io98aeptHg/minimal-privilege-msk-scram-kms-key-policy

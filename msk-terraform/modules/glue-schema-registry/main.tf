@@ -14,7 +14,6 @@ resource "aws_glue_schema" "this" {
   data_format       = each.value.data_format
   compatibility     = each.value.compatibility
   schema_definition = each.value.schema_definition
-
-  tags = var.tags
+  tags              = var.tags
 }
 

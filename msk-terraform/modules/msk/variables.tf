@@ -92,7 +92,6 @@ variable "monitoring_cidr_blocks" {
 variable "scram_users" {
   type = list(object({
     username = string
-    password = string
   }))
   description = "The list of SCRAM users to create"
   default     = []
