@@ -19,7 +19,6 @@ inputs = {
     test_role = {
       # prinicipal_arns   = "arn:aws:iam::123456789012:role/test-role"
       account_id = "12345689012"
-      schemas    = []
       registries = ["test-registry"]
       policy_conditions = [
         {

@@ -27,8 +27,7 @@ variable "cross_account_access" {
   type = map(object({
     prinicipal_arns = optional(list(string), [])
     account_id      = string
-    schemas         = list(string)
-    registries      = list(string)
+    registries       = list(string)
     policy_conditions = optional(list(object({
       test     = string
       variable = string

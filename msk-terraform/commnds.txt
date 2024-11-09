@@ -4,3 +4,54 @@ chmod +x terragrunt
 mv terragrunt /usr/local/bin/
 
 
+tee ~/sample-schema.avsc <<EOF
+{
+  "type": "record",
+  "name": "User",
+  "namespace": "com.example",
+  "fields": [
+    {"name": "id", "type": "int"},
+    {"name": "name", "type": "string"},
+    {"name": "email", "type": "string"},
+    {"name": "age", "type": ["null", "int"], "default": null}
+  ]
+}
+EOF
+
+
+Create Schema:
+=============
+aws glue create-schema \
+    --schema-name "SampleAvroSchema" \
+    --data-format "AVRO" \
+    --compatibility "BACKWARD" \
+    --schema-definition file://sample-schema.avsc \
+    --registry-id RegisrtyArn="<registry-arn>"
+
+
+Update:
+=======
+aws glue update-schema --description testDescription --schema-id SchemaArn="arn:aws:glue:us-east-2:901234567890:schema/registryName1/testSchema1" --schema-version-number LatestVersion=true
+
+Add a New Schema Version:
+==========================
+tee updated-sample-schema.avsc <<EOF
+{
+  "type": "record",
+  "name": "User",
+  "namespace": "com.example",
+  "fields": [
+    {"name": "id", "type": "int"},
+    {"name": "name", "type": "string"},
+    {"name": "email", "type": "string"},
+    {"name": "age", "type": ["null", "int"], "default": null},
+    {"name": "address", "type": ["null", "string"], "default": null}
+  ]
+}
+EOF
+
+aws glue register-schema-version --schema-definition file://updated-sample-schema.avsc --schema-id SchemaArn="<schema-arn>"
+
+Delete Schema: 
+=============
+aws glue delete-schema --schema-id SchemaArn="<schema-arn>" 

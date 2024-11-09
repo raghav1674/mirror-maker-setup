@@ -7,23 +7,26 @@ data "aws_iam_policy_document" "cross_account_role_policy" {
       "glue:GetSchemaByDefinition",
       "glue:CreateSchema",
       "glue:RegisterSchemaVersion",
-      "glue:PutSchemaVersionMetadata"
+      "glue:PutSchemaVersionMetadata",
+      "glue:UpdateSchema",
+      "glue:DeleteSchema",
     ]
 
     resources = concat(
-      [for schema_name in each.value.schemas : local.schemas[schema_name]],
-      [for registry_name in each.value.registries : local.registries[registry_name]]
+      [for registry in each.value.registries: "arn:aws:glue:${local.region}:${local.account_id}:schema/${registry}/*"  ],
+      [for registry in each.value.registries: "arn:aws:glue:${local.region}:${local.account_id}:registry/${registry}"  ]
     )
   }
   statement {
     effect  = "Allow"
     actions = ["glue:GetSchemaVersion"]
-    resources = concat(
-      [for schema_name in each.value.schemas : local.schemas[schema_name]],
-      [for registry_name in each.value.registries : local.registries[registry_name]]
+    resources =concat(
+      [for registry in each.value.registries: "arn:aws:glue:${local.region}:${local.account_id}:schema/${registry}/*"  ],
+      [for registry in each.value.registries: "arn:aws:glue:${local.region}:${local.account_id}:registry/${registry}"  ]
     )
   }
 }
+
 
 data "aws_iam_policy_document" "glue_assume_role_policy" {
   for_each = var.cross_account_access
