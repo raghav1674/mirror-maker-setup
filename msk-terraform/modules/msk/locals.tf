@@ -40,4 +40,6 @@ locals {
   account_id = data.aws_caller_identity.current.account_id
 
   create_scram_users = length(var.scram_users) > 0 ? 1 : 0
+
+  create_cloudwatch_log_group = var.create_cloudwatch_log_group ? 1 : 0
 }

@@ -96,3 +96,9 @@ variable "scram_users" {
   description = "The list of SCRAM users to create"
   default     = []
 }
+
+variable "create_cloudwatch_log_group" {
+  default = false
+  type    = bool
+  description = "Indicates whether you want to create a CloudWatch log group for the MSK cluster"
+}

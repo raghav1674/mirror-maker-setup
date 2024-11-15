@@ -82,8 +82,8 @@ resource "aws_msk_cluster" "this" {
   logging_info {
     broker_logs {
       cloudwatch_logs {
-        enabled   = true
-        log_group = aws_cloudwatch_log_group.this.name
+        enabled   = local.create_cloudwatch_log_group
+        log_group = try(aws_cloudwatch_log_group.this[0].name, null)
       }
     }
   }
