@@ -95,4 +95,5 @@ resource "aws_msk_cluster" "this" {
   #   ]
   # }
 
+  tags = var.tags
 }

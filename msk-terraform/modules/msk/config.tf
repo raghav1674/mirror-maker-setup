@@ -2,10 +2,6 @@ resource "aws_msk_configuration" "this" {
   kafka_versions    = [local.kafka_version]
   name              = "${var.cluster_name}-${local.version}-config"
   server_properties = var.broker_configuration
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 locals {

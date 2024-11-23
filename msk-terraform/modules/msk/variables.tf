@@ -90,3 +90,8 @@ variable "create_cloudwatch_log_group" {
   description = "Indicates whether you want to create a CloudWatch log group for the MSK cluster"
   default     = false
 }
+
+variable "tags" {
+  type    = map(string)
+  default = {}
+}

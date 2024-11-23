@@ -3,6 +3,7 @@ resource "aws_security_group" "internal" {
   name        = "${var.cluster_name}-internal-sg"
   description = "For internal communication between brokers"
   vpc_id      = var.vpc_id
+  tags        = var.tags
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_inter_broker_access" {
@@ -33,6 +34,7 @@ resource "aws_security_group" "monitoring" {
   name        = "${var.cluster_name}-monitoring-sg"
   description = "For monitoring"
   vpc_id      = var.vpc_id
+  tags        = var.tags
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_monitoring" {
@@ -51,6 +53,7 @@ resource "aws_security_group" "external" {
   name        = "${var.cluster_name}-external-sg"
   description = "For client to broker communication"
   vpc_id      = var.vpc_id
+  tags        = var.tags
 }
 
 resource "aws_vpc_security_group_ingress_rule" "allow_broker_client_access" {
@@ -69,5 +72,6 @@ resource "aws_security_group" "additional" {
   name        = "${var.cluster_name}-additional-sg"
   description = "For additional client communication"
   vpc_id      = var.vpc_id
+  tags        = var.tags
 }
 

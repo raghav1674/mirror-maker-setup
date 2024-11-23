@@ -4,6 +4,7 @@ resource "aws_kms_key" "this" {
   enable_key_rotation      = true
   deletion_window_in_days  = 7
   customer_master_key_spec = "SYMMETRIC_DEFAULT"
+  tags                     = var.tags
 }
 
 # https://repost.aws/questions/QU-l9TBiKvR0a_Io98aeptHg/minimal-privilege-msk-scram-kms-key-policy
@@ -78,6 +79,7 @@ module "secrets" {
   name                    = each.key
   recovery_window_in_days = 7
   secret_string           = jsonencode(each.value)
+  tags                    = var.tags
 }
 
 resource "aws_msk_scram_secret_association" "this" {
