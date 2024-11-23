@@ -1,9 +1,31 @@
-variable "schema_registries" {
-  type = list(object({
-    name        = string
-    description = string
-  }))
-  default = []
+variable "schema_registry_name" {
+  type        = string
+  description = "Name for the schema registry"
+}
+
+variable "schema_registry_description" {
+  type        = string
+  description = "Description for the schema registry"
+  default     = null
+}
+
+variable "schema_registry_assume_role_name" {
+  type        = string
+  description = "Name of the assume role to be created for glue schema registry access, defaults to 'registry_name_GlueSchemaAccessRole"
+  default     = null
+}
+
+variable "account_ids" {
+  type        = list(string)
+  description = "Ids of the account ids to allow cross account access to"
+  default     = []
+}
+
+
+variable "prinicipal_arns" {
+  type        = list(string)
+  description = "List of prinicipals to allow access to schema registry"
+  default     = []
 }
 
 variable "tags" {
@@ -11,28 +33,3 @@ variable "tags" {
   default = {}
 }
 
-variable "schemas" {
-  type = list(object({
-    schema_registry_name = string
-    schema_name          = string
-    description          = string
-    data_format          = optional(string, "AVRO")
-    compatibility        = optional(string, "BACKWARD")
-    schema_definition    = string
-  }))
-  default = []
-}
-
-variable "cross_account_access" {
-  type = map(object({
-    prinicipal_arns = optional(list(string), [])
-    account_id      = string
-    registries       = list(string)
-    policy_conditions = optional(list(object({
-      test     = string
-      variable = string
-      values   = list(string)
-    })), [])
-  }))
-  default = {}
-}

@@ -14,7 +14,7 @@ output "security_group_ids" {
 }
 
 output "scram_users" {
-  value = { for username,secret in module.secrets : username => secret.arn }
+  value = { for username, secret in module.secrets : username => secret.arn }
 }
 
 output "secretsmanager_kms_key_id" {

@@ -1,6 +1,6 @@
 resource "aws_msk_configuration" "this" {
   kafka_versions    = [local.kafka_version]
-  name              = "${var.cluster_name}-${local.version}-config-${local.configsha}"
+  name              = "${var.cluster_name}-${local.version}-config"
   server_properties = var.broker_configuration
 
   lifecycle {
@@ -9,6 +9,5 @@ resource "aws_msk_configuration" "this" {
 }
 
 locals {
-  configsha = substr(sha256(var.broker_configuration), 0, 4)
-  version   = replace(local.kafka_version, ".", "-")
+  version = replace(local.kafka_version, ".", "-")
 }

@@ -1,11 +1,23 @@
 locals {
-  schemas    = { for schema in var.schemas : schema.schema_name => aws_glue_schema.this[schema.schema_name].arn }
-  registries = { for schema_registry in var.schema_registries : schema_registry.name => aws_glue_registry.this[schema_registry.name].arn }
+  region     = data.aws_region.current.id
+  account_id = data.aws_caller_identity.current.account_id
 }
 
 
 locals {
-  region     = data.aws_region.current.id
-  account_id = data.aws_caller_identity.current.account_id
+  resource_arns = [
+    "arn:aws:glue:${local.region}:${local.account_id}:schema/${var.schema_registry_name}/*",
+    "arn:aws:glue:${local.region}:${local.account_id}:registry/${var.schema_registry_name}"
+  ]
+
+  principal_arns = concat([for account_id in var.var.account_ids : "arn:aws:iam::${account_id}:root"], var.prinicipal_arns)
+
+  policy_conditions = [
+    {
+      test     = "StringEquals"
+      variable = "aws:userid"
+      values   = ["12345689012"]
+    }
+  ]
 }
 

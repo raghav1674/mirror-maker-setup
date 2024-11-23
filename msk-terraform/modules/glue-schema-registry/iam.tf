@@ -1,6 +1,4 @@
 data "aws_iam_policy_document" "cross_account_role_policy" {
-  for_each = var.cross_account_access
-
   statement {
     effect = "Allow"
     actions = [
@@ -12,33 +10,25 @@ data "aws_iam_policy_document" "cross_account_role_policy" {
       "glue:DeleteSchema",
     ]
 
-    resources = concat(
-      [for registry in each.value.registries: "arn:aws:glue:${local.region}:${local.account_id}:schema/${registry}/*"  ],
-      [for registry in each.value.registries: "arn:aws:glue:${local.region}:${local.account_id}:registry/${registry}"  ]
-    )
+    resources = local.resource_arns
   }
   statement {
-    effect  = "Allow"
-    actions = ["glue:GetSchemaVersion"]
-    resources =concat(
-      [for registry in each.value.registries: "arn:aws:glue:${local.region}:${local.account_id}:schema/${registry}/*"  ],
-      [for registry in each.value.registries: "arn:aws:glue:${local.region}:${local.account_id}:registry/${registry}"  ]
-    )
+    effect    = "Allow"
+    actions   = ["glue:GetSchemaVersion"]
+    resources = local.resource_arns
   }
 }
 
 
 data "aws_iam_policy_document" "glue_assume_role_policy" {
-  for_each = var.cross_account_access
   statement {
     actions = ["sts:AssumeRole"]
-
     principals {
       type        = "AWS"
-      identifiers = concat(["arn:aws:iam::${each.value.account_id}:root"], each.value.prinicipal_arns)
+      identifiers = local.principal_arns
     }
     dynamic "condition" {
-      for_each = each.value.policy_conditions
+      for_each = local.policy_conditions
       content {
         test     = condition.value.test
         variable = condition.value.variable
@@ -46,25 +36,18 @@ data "aws_iam_policy_document" "glue_assume_role_policy" {
       }
     }
   }
-  lifecycle {
-    precondition {
-      condition     = length(each.value.prinicipal_arns) > 0 || length(each.value.policy_conditions) > 0
-      error_message = "Either principal_arns or iam policy_conditions must be provided for ${each.key} cross account access"
-    }
-  }
 }
 
 resource "aws_iam_role" "glue_cross_account_role" {
-  for_each           = var.cross_account_access
-  name               = "${each.key}_GlueSchemaAccessRole"
+  name               = coalesce(var.schema_registry_assume_role_name, "${var.schema_registry_name}_GlueSchemaAccessRole")
   path               = "/"
-  assume_role_policy = data.aws_iam_policy_document.glue_assume_role_policy[each.key].json
+  assume_role_policy = data.aws_iam_policy_document.glue_assume_role_policy.json
+  tags               = var.tags
 }
 
 resource "aws_iam_role_policy" "cross_account_role_policy" {
-  for_each = var.cross_account_access
-  role     = aws_iam_role.glue_cross_account_role[each.key].name
-  policy   = data.aws_iam_policy_document.cross_account_role_policy[each.key].json
+  role   = aws_iam_role.glue_cross_account_role.name
+  policy = data.aws_iam_policy_document.cross_account_role_policy.json
 }
 
 

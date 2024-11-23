@@ -34,7 +34,7 @@ locals {
     }
   }
 
-  kafka_version = var.kraft_enabled ? "${var.kafka_version}.kraft" : var.kafka_version
+  kafka_version = var.kafka_version
 
   region     = data.aws_region.current.id
   account_id = data.aws_caller_identity.current.account_id

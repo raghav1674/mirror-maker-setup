@@ -9,8 +9,6 @@ variable "broker_subnets" {
   description = "The subnets to place the broker nodes in"
 }
 
-
-
 variable "cluster_name" {
   type        = string
   description = "The name of the MSK cluster"
@@ -21,20 +19,10 @@ variable "kafka_version" {
   description = "The version of Apache Kafka"
 }
 
-variable "kraft_enabled" {
-  type        = bool
-  default     = false
-  description = "Indicates whether you want to enable or disable the Kafka Raft protocol"
-}
-
-
-
 variable "broker_configuration" {
   type        = string
   description = "The configuration of the broker nodes"
 }
-
-
 
 variable "number_of_brokers" {
   type        = number
@@ -44,8 +32,8 @@ variable "number_of_brokers" {
 
 variable "broker_instance_type" {
   type        = string
-  default     = "kafka.m5.large"
   description = "The instance type of the broker nodes"
+  default     = "kafka.m5.large"
 }
 
 variable "broker_volume_size" {
@@ -98,7 +86,7 @@ variable "scram_users" {
 }
 
 variable "create_cloudwatch_log_group" {
-  default = false
-  type    = bool
+  type        = bool
   description = "Indicates whether you want to create a CloudWatch log group for the MSK cluster"
+  default     = false
 }
