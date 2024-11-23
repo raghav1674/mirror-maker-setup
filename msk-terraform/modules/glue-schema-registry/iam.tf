@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "glue_assume_role_policy" {
 }
 
 resource "aws_iam_role" "glue_cross_account_role" {
-  name               = coalesce(var.schema_registry_assume_role_name, "${var.schema_registry_name}_GlueSchemaAccessRole")
+  name               = coalesce(var.schema_registry_assume_role_name, "${var.schema_registry_name}_GlueSchemaAssumeRole")
   path               = "/"
   assume_role_policy = data.aws_iam_policy_document.glue_assume_role_policy.json
   tags               = var.tags

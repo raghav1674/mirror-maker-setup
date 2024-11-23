@@ -11,7 +11,7 @@ variable "schema_registry_description" {
 
 variable "schema_registry_assume_role_name" {
   type        = string
-  description = "Name of the assume role to be created for glue schema registry access, defaults to 'registry_name_GlueSchemaAccessRole"
+  description = "Name of the assume role to be created for glue schema registry access, defaults to 'registry_name_GlueSchemaAssumeRole"
   default     = null
 }
 
