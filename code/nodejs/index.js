@@ -23,7 +23,7 @@ exports.handler = async (event) => {
     const region = process.env.AWS_REGION
     const aws_role_arn = process.env.MSK_ASSUME_ROLE_ARN
 
-    console.log("=====================================")
+    console.log("=========== DETAILS ==================")
 
     console.log("TOPIC_NAME: ", topic_name)
     console.log("BOOTSTRAP_SERVER: ", bootstrap_servers)
@@ -34,6 +34,16 @@ exports.handler = async (event) => {
     console.log("=====================================")
 
 
+    console.log("============= CHECKING CONNECTIVITY ==================")
+    console.log("Checking connection to Kafka")
+
+    require('net').createConnection({ host: bootstrap_servers.at(0), port: 9098 }, () => console.log('Connected')).on('error', console.error).end();
+
+    console.log("=====================================")
+
+
+    console.log("============= AUTHENTICATING TO MSK ==================")
+
     const kafka = new Kafka({
         clientId: 'test-client',
         brokers: bootstrap_servers,
@@ -43,6 +53,11 @@ exports.handler = async (event) => {
             oauthBearerProvider: () => oauthBearerTokenProvider(region, aws_role_arn, 'test-session')
         }
     })
+
+    console.log("=====================================")
+
+
+    console.log("============= PRODUCING AND CONSUMING ==================")
 
     const producer = kafka.producer()
     const consumer = kafka.consumer({ groupId: consumer_group })
