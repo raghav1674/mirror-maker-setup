@@ -22,9 +22,9 @@ variable "account_ids" {
 }
 
 
-variable "prinicipal_arns" {
+variable "principal_arns" {
   type        = list(string)
-  description = "List of prinicipals to allow access to schema registry"
+  description = "List of principals to allow access to schema registry"
   default     = []
 }
 
