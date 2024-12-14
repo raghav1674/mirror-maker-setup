@@ -20,3 +20,7 @@ resource "aws_iam_role_policy" "assume_role_policy" {
   role   = aws_iam_role.assume_role.name
   policy = module.msk_iam_access_policy.policy_document
 }
+
+output "role_arn" {
+  value = aws_iam_role.assume_role.arn
+}

@@ -20,7 +20,7 @@ exports.handler = async (event) => {
     const topic_name = process.env.TOPIC_NAME
     const bootstrap_servers = process.env.BOOTSTRAP_SERVER.split(',')
     const consumer_group = process.env.CONSUMER_GROUP
-    const region = process.env.AWS_REGION
+    const region = process.env.REGION
     const aws_role_arn = process.env.MSK_ASSUME_ROLE_ARN
 
     console.log("=========== DETAILS ==================")
@@ -28,7 +28,7 @@ exports.handler = async (event) => {
     console.log("TOPIC_NAME: ", topic_name)
     console.log("BOOTSTRAP_SERVER: ", bootstrap_servers)
     console.log("CONSUMER_GROUP: ", consumer_group)
-    console.log("AWS_REGION: ", region)
+    console.log("REGION: ", region)
     console.log("MSK_ASSUME_ROLE_ARN: ", aws_role_arn)
 
     console.log("=====================================")
@@ -37,12 +37,13 @@ exports.handler = async (event) => {
     console.log("============= CHECKING CONNECTIVITY ==================")
     console.log("Checking connection to Kafka")
 
-    require('net').createConnection({ host: bootstrap_servers.at(0), port: 9098 }, () => console.log('Connected')).on('error', console.error).end();
+    require('net').createConnection({ host: bootstrap_servers.at(0).split(":").at(0), port: 9098 }, () => console.log('Connected')).on('error', console.error).end();
 
     console.log("=====================================")
 
 
     console.log("============= AUTHENTICATING TO MSK ==================")
+
 
     const kafka = new Kafka({
         clientId: 'test-client',
@@ -53,6 +54,23 @@ exports.handler = async (event) => {
             oauthBearerProvider: () => oauthBearerTokenProvider(region, aws_role_arn, 'test-session')
         }
     })
+
+    console.log("=====================================")
+
+    console.log("===== CREATING TOPIC IF NOT EXISTS =====")
+
+    const admin = kafka.admin()
+    await admin.connect()
+    const topic = await admin.listTopics()
+    if (topic.includes(topic_name)) {
+        console.log("Topic already exists")
+    } else {
+        console.log("Creating topic")
+        await admin.createTopics({
+            topics: [{ topic: topic_name, numPartitions: 1, replicationFactor: 1 }],
+        })
+    }
+    await admin.disconnect()
 
     console.log("=====================================")
 
@@ -82,10 +100,9 @@ exports.handler = async (event) => {
                 offset: message.offset,
                 value: message.value.toString(),
             })
-            messages.push(message.value.toString())
-        },
+            console.log("=====================================")
+            console.log("message: ", message.value.toString())
+            console.log("=====================================")
+        }
     })
-    console.log("=====================================")
-    console.log("Messages: ", messages)
-    console.log("=====================================")
 }
