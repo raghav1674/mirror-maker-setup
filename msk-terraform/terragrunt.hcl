@@ -1,9 +1,9 @@
 locals {
-  input_vars       = read_terragrunt_config("inputs.hcl")
-  config_vars      = read_terragrunt_config(find_in_parent_folders("config.hcl")).inputs
-  component_name   = "${basename(path_relative_to_include())}"
-  region_name      = "${basename(dirname(path_relative_to_include()))}"
-  
+  input_vars     = read_terragrunt_config("inputs.hcl")
+  config_vars    = read_terragrunt_config(find_in_parent_folders("config.hcl")).inputs
+  component_name = "${basename(path_relative_to_include())}"
+  region_name    = "${basename(dirname(path_relative_to_include()))}"
+
   config_overrides = try(read_terragrunt_config("config-overrides.hcl").inputs, {})
   module_name      = try(local.config_overrides.module_name, local.component_name)
 }

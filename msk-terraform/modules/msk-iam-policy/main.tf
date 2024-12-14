@@ -2,7 +2,11 @@ data "aws_iam_policy_document" "access_policy" {
   statement {
     sid       = "AllowMskClusterAccess"
     effect    = "Allow"
-    actions   = ["kafka-cluster:Connect"]
+    actions   = [
+      "kafka-cluster:Connect",
+      "kafka-cluster:DescribeCluster",
+      "kafka-cluster:DescribeClusterDynamicConfiguration"
+    ]
     resources = ["${local.msk_arn_prefix}:cluster/${var.msk_cluster_name}/*"]
   }
 
@@ -46,7 +50,8 @@ data "aws_iam_policy_document" "access_policy" {
         "kafka-cluster:AlterTopic",
         "kafka-cluster:DescribeTopicDynamicConfiguration",
         "kafka-cluster:AlterTopicDynamicConfiguration",
-        "kafka-cluster:CreateTopic"
+        "kafka-cluster:CreateTopic",
+        "kafka-cluster:DeleteTopic"
       ]
       resources = [for topic in local.write_topics : "${local.msk_arn_prefix}:topic/${var.msk_cluster_name}/*/${topic}"]
 
