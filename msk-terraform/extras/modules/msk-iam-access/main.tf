@@ -1,25 +1,28 @@
-# Attach admin policy
-resource "aws_iam_role_policy_attachment" "admin_roles" {
-  for_each   = local.admin_roles
-  role       = each.key
-  policy_arn = aws_iam_policy.admin_access.arn
+data "aws_iam_policy_document" "msk_assume_role_policy" {
+  for_each = var.iam_access_policies
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    dynamic "principals" {
+      for_each = each.value.principals
+      content {
+        type        = principals.value.type
+        identifiers = principals.value.arns
+      }
+    }
+  }
 }
 
-resource "aws_iam_user_policy_attachment" "admin_users" {
-  for_each   = local.admin_users
-  user       = each.key
-  policy_arn = aws_iam_policy.admin_access.arn
+resource "aws_iam_role" "assume_role" {
+  for_each           = var.iam_access_policies
+  name               = "${each.key}_MSKAssumeAccessRole"
+  assume_role_policy = data.aws_iam_policy_document.msk_assume_role_policy[each.key].json
+  tags               = var.tags
 }
 
-# Attach iam access policies to roles and users
-resource "aws_iam_role_policy_attachment" "iam_roles" {
-  for_each   = local.iam_roles
-  role       = each.value.principal_arn
-  policy_arn = module.msk_iam_role_policies[each.key].policy_arn
-}
-
-resource "msk_iam_user_policies" "iam_users" {
-  for_each   = local.iam_users
-  user       = each.value.principal_arn
-  policy_arn = module.msk_iam_user_policies[each.key].policy_arn
+resource "aws_iam_role_policy" "admin_policy" {
+  for_each = var.iam_access_policies
+  name     = "${each.key}_MSKAccessPolicy"
+  role     = aws_iam_role.assume_role[each.key].name
+  policy   = module.msk_iam_access_policies[each.key].policy_document
 }

@@ -32,7 +32,7 @@ resource "aws_instance" "monitoring" {
   user_data_base64            = data.cloudinit_config.monitoring[0].rendered
   user_data_replace_on_change = true
   associate_public_ip_address = var.associate_public_ip_address
-  iam_instance_profile  = var.instance_profile_name
+  iam_instance_profile        = var.instance_profile_name
   tags = {
     Name = var.monitoring_instance.name
   }

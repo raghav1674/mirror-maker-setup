@@ -3,14 +3,14 @@ variable "msk_cluster_name" {
   type        = string
 }
 
-variable "msk_cluster_arn" {
-  description = "The ARN of the MSK cluster"
+variable "msk_cluster_region" {
+  description = "The region of the MSK cluster"
   type        = string
 }
 
-variable "principal_name" {
+variable "msk_cluster_account_id" {
+  description = "The  account id of the MSK cluster"
   type        = string
-  description = "The name of the principal"
 }
 
 variable "access_policies" {
