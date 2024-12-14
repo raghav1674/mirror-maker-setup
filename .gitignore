@@ -5,3 +5,5 @@ terraform/**/.terraform
 
 scripts/actual-configurations
 reference
+
+node_modules
