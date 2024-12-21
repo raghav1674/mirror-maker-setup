@@ -24,7 +24,7 @@ variable "msk_cluster_account_id" {
     - Read Topic
     - Write Topic
     - Write TransactionalId
-    - Read Group
+    - Write Group
 
     eg. 
      access_policies = [
@@ -50,7 +50,7 @@ variable "msk_cluster_account_id" {
       {
         resource_type  = "Group"
         resource_names = ["group1", "group2"]
-        access_type    = "Read"
+        access_type    = "Write"
       }
     ]
 */

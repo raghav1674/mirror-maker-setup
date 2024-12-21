@@ -1,0 +1,21 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowGlueAccess",
+            "Effect": "Allow",
+            "Action": [
+                "glue:UpdateSchema",
+                "glue:RegisterSchemaVersion",
+                "glue:PutSchemaVersionMetadata",
+                "glue:GetSchemaByDefinition",
+                "glue:DeleteSchema",
+                "glue:CreateSchema"
+            ],
+            "Resource": [
+                "arn:aws:glue:ap-south-1:xxxxx:schema/test-registry/*",
+                "arn:aws:glue:ap-south-1:xxxxx:registry/test-registry"
+            ]
+        }
+    ]
+}

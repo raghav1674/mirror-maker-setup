@@ -1,8 +1,8 @@
 data "aws_iam_policy_document" "access_policy" {
   statement {
-    sid       = "AllowMskClusterAccess"
-    effect    = "Allow"
-    actions   = [
+    sid    = "AllowMskClusterAccess"
+    effect = "Allow"
+    actions = [
       "kafka-cluster:Connect",
       "kafka-cluster:DescribeCluster",
       "kafka-cluster:DescribeClusterDynamicConfiguration"
@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "access_policy" {
   }
 
   dynamic "statement" {
-    for_each = length(local.read_groups) > 0 ? [1] : []
+    for_each = length(local.write_groups) > 0 ? [1] : []
     content {
       sid    = "AllowConsumerGroupAccess"
       effect = "Allow"
@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "access_policy" {
         "kafka-cluster:AlterGroup",
         "kafka-cluster:DeleteGroup"
       ]
-      resources = [for consumer_group in local.read_groups : "${local.msk_arn_prefix}:group/${var.msk_cluster_name}/*/${consumer_group}"]
+      resources = [for consumer_group in local.write_groups : "${local.msk_arn_prefix}:group/${var.msk_cluster_name}/*/${consumer_group}"]
 
     }
   }

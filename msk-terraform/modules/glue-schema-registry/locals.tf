@@ -10,7 +10,7 @@ locals {
     "arn:aws:glue:${local.region}:${local.account_id}:registry/${var.schema_registry_name}"
   ]
 
-  principal_arns = concat([for account_id in var.var.account_ids : "arn:aws:iam::${account_id}:root"], var.principal_arns)
+  principal_arns = concat([for account_id in var.account_ids : "arn:aws:iam::${account_id}:root"], var.principal_arns)
 
   policy_conditions = [
     {
