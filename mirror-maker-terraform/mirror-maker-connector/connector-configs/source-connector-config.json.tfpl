@@ -1,0 +1,8 @@
+{   
+    "name": "${name}"
+    "connector.class": "org.apache.kafka.connect.mirror.MirrorSourceConnector",
+    "replication.policy.class": "org.apache.kafka.connect.mirror.IdentityReplicationPolicy",
+    "key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+    "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
+    "offset-syncs.topic.location": "target"
+}
