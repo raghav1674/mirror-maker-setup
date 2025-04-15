@@ -10,6 +10,10 @@ resource "kafka-connect_connector" "source_connector" {
 
   config = merge(templatefile("connector-configs/source-connector-config.json.tfpl", {
     name = var.connector_name
+    num_tasks = var.num_tasks
+    topics = var.topics_to_replicate
+    target_cluster_config = var.target_cluster_config
+    source_cluster_config = var.source_cluster_config
   }), var.connector_config)
 
   config_sensitive = local.config_sensitive

@@ -13,6 +13,27 @@ variable "connector_config" {
   type        = map(string)
 }
 
+variable "topics_to_replicate" {
+  description = "List of topics to replicate"
+  type        = list(string)
+}
+
+variable "num_tasks" {
+  description = "Number of tasks for the connector"
+  type        = number
+  default     = 1
+}
+
+variable "source_cluster_config" {
+  description = "Configuration for the source cluster"
+  type        = map(string)
+}
+
+variable "target_cluster_config" {
+  description = "Configuration for the target cluster"
+  type        = map(string)
+}
+
 
 variable "source_region" {
   type        = string
