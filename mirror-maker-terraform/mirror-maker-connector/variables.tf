@@ -1,5 +1,5 @@
-variable "kafka_connect_lb_dns" {
-  description = "DNS name of the load balancer for Kafka Connect"
+variable "kafka_connect_url" {
+  description = "URL of load balancer for Kafka Connect"
   type        = string
 }
 
@@ -34,17 +34,9 @@ variable "target_cluster_config" {
   type        = map(string)
 }
 
-
-variable "source_region" {
+variable "region" {
   type        = string
-  default     = "us-east-1"
-  description = "AWS region for the target cluster"
-}
-
-variable "target_region" {
-  type        = string
-  default     = "us-east-1"
-  description = "AWS region for the target cluster"
+  description = "AWS region where connectors to be deployed"
 }
 
 variable "source_secret" {

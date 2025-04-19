@@ -1,15 +1,15 @@
 {   
-    "name": "${name}"
+    "name": "${name}",
     "connector.class": "org.apache.kafka.connect.mirror.MirrorSourceConnector",
     "replication.policy.class": "org.apache.kafka.connect.mirror.IdentityReplicationPolicy",
     "topics": "${topics}",
     "tasks.max": "${num_tasks}",
-    %{ for property,value in source_cluster_config }%
+    %{ for property,value in source_cluster_config }
     "source.cluster.${property}": "${value}",
-    %{ endfor %}
-    %{ for property,value in target_cluster_config }%
+    %{ endfor }
+    %{ for property,value in target_cluster_config }
     "target.cluster.${property}": "${value}",
-    %{ endfor %}
+    %{ endfor }
     "key.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
     "value.converter": "org.apache.kafka.connect.converters.ByteArrayConverter",
     "offset-syncs.topic.location": "target",
